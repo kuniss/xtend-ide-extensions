@@ -80,14 +80,14 @@ styles [] {
 }
 
 .text : style {
-   color                 = light_blue
+   color                 = orange
    ace_scope             = meta.tag string.quoted constant.character.entity
    textmate_scope        = meta.tag string.quoted constant.character.entity
    pygments_scope        = String
 }
 
 .template : style {
-   color                 = orange
+   color                 = light_blue
    ace_scope             = meta.tag string.quoted constant.character.entity
    textmate_scope        = meta.tag string.quoted constant.character.entity
    pygments_scope        = String
@@ -186,12 +186,26 @@ MethodOrFieldDefinition: context {
    : include "FieldOrVarModifier";
    : include "MethodModifier";
    : include "TypeParameters";
-   : include "Name";
    : include "Parameters";
-   : include "ExpressionBody";
+   : include "Expression";
+   : include "Name";
 }
 
-ExpressionBody:  context {
+Expression: context {
+      : include "multi_line_comment" ;
+      : include "single_line_comment" ;
+      : include "ExpressionKeywords";
+      : include "Operators";
+      : include "Punctuation";
+      : include "StringOrTemplateString";
+      : include "BracedExpression";
+      : include "ParenthesizedExpression";
+      : include "BracketizedExpression";
+      : include "QualifiedName";
+      : include "Annotation";
+}
+
+BracedExpression:  context {
    : inline_push {
       regex          \= (\{)
       styles []       = .parenthesis;
@@ -199,23 +213,9 @@ ExpressionBody:  context {
          regex       \= (\})
          styles []    = .parenthesis;
       }
-      : include "multi_line_comment" ;
-      : include "single_line_comment" ;
       
       : include "Expression";
    }
-}
-
-Expression: context {
-      : include "ExpressionKeywords";
-      : include "Operators";
-      : include "Punctuation";
-      : include "StringOrTemplateString";
-      : include "ExpressionBody";
-      : include "ParenthesizedExpression";
-      : include "BracketizedExpression";
-      : include "QualifiedName";
-      : include "Annotation";
 }
 
 ParenthesizedExpression: context {
@@ -248,7 +248,7 @@ BracketizedExpression: context {
 
 ExpressionKeywords: context {
    : pattern {
-      regex       \= (\btry\b)|(\bcatch\b)|(\bfinally\b)|(\breturn\b)|(\bnew\b)|(\bswitch\b)|(\bcase\b)|(\bdefault\b)|(\bif\b)|(\belse\b)|(\bwhile\b)|(\bfor\b)
+      regex       \= (\btry\b)|(\bcatch\b)|(\bfinally\b)|(\breturn\b)|(\bnew\b)|(\bswitch\b)|(\bcase\b)|(\bdefault\b)|(\bif\b)|(\belse\b)|(\bwhile\b)|(\bfor\b)|(\bdo\b)|(\bsuper\b)|(\btrue\b)|(\bfalse\b)|(\bnull\b)|(\btypeof\b)|(\bthrow\b)|(\bsynchronized\b)
       styles []    = .keyword ; 
    }
    : include "FieldOrVarModifier";
@@ -283,7 +283,7 @@ TypeParameters: context {
 
 CommonModifier: context {
    : pattern {
-      regex       \= (\bpublic\b)|(\bprivate\b)|(\bprotected\b)|(\bpackage\b)|(\babstract\b)|(\bstatic\b)|(\bdispatch\b)|(\bfinal\b)|(\bstrictfp\b)|(\bnative\b)|(\bvolatile\b)|(\bsynchronized\b)|(\btransient\b)
+      regex       \= (\bpublic\b)|(\bprivate\b)|(\bprotected\b)|(\bpackage\b)|(\babstract\b)|(\bstatic\b)|(\bdispatch\b)|(\bfinal\b)|(\bstrictfp\b)|(\bnative\b)|(\bvolatile\b)|(\bsynchronized\b)|(\btransient\b)|(\bboolean\b)|(\bint\b)|(\bfloat\b)|(\bdouble\b)|(\bchar\b)
       styles []    = .keyword ; 
    }
 }
@@ -318,7 +318,7 @@ Punctuation: context {
 
 Operators: context {
    : pattern { 
-      regex       \= (#|\*|&|\?|\*|\+|(===)|(==)|=|&|!|(=>)|(->)|(\+=)|(\?=)|(\.\.)|(\->)|\||(\|\|))|(\binstanceof\b)
+      regex       \= (#|\*|&|\?|\*|\+|(===)|(==)|=|&|!|(=>)|(->)|(\+=)|(\?=)|(\.\.)|(\->)|<|>|\||(\|\|))|(\binstanceof\b)
       styles []    = .operator ;
    }
 }
@@ -418,10 +418,13 @@ TemplateString : context {
          regex       \= (\'\'\')
          styles []    = .template;
       }
+      : include "TemplateComment";
       : include "TEMPLATE_TEXT";
       : include "TemplateExpression";
    }
 }
+
+
 
 TemplateExpression : context {
    description       = Xtend template string before template placeholder expression
@@ -432,12 +435,20 @@ TemplateExpression : context {
          regex       \= (»)
          styles []    = .parenthesis;
       }
+      : include "TemplateKeywords";
       : include "Expression";
    }
 }
 
+TemplateKeywords: context {
+   : pattern {
+      regex          \= (\bFOR\b)|(\bBEFORE\b)|(\bSEPARATOR\b)|(\bAFTER\b)|(\bENDFOR\b)|(\bIF\b)|(\bELSE\b)|(\bELSEIF\b)|(\bENDIF\b)
+      styles []       = .keyword;
+   }
+}
+
 TEMPLATE_TEXT: context {
-   description        = RICH_TEXT_START
+   description        = text in Xtend template expressions
    : pattern {
       regex          \= ([^«])
       styles []       = .template;
@@ -446,7 +457,13 @@ TEMPLATE_TEXT: context {
 
 //terminal COMMENT_RICH_TEXT_INBETWEEN: "««" !('\n'|'\r')* ('\r'? '\n' IN_RICH_STRING* ("'" "'"?)? '«')?;
 //terminal COMMENT_RICH_TEXT_END: "««" !('\n'|'\r')* (('\r'? '\n' IN_RICH_STRING* ("'''"| ("'" "'"?)? EOF)) | EOF);
-
+TemplateComment: context {
+   description        = comments in Xtend template expressions
+   : pattern {
+      regex          \= (««[^\n\r]*)
+      styles []       = .comment;
+   }
+}
 
 
 }
