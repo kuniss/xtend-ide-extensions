@@ -1,0 +1,453 @@
+#################################################################
+## Iro
+################################################################ 
+##
+## * Press Ctrl + '+'/'-' To Zoom in
+## * Press Ctrl + S to save and recalculate... 
+## * Documents are saved to web storage.
+## * Only one save slot supported.
+## * Matches cannot span lines.
+## * Unicode chars must be defined in \u0000 to \uffff format.
+## * All matches must be contained by a single group ( ... )
+## * Look behinds not permitted, (?<= or (?<!
+## * Look forwards are permitted (?= or (?!
+## * Constants are defined as __my_const = (......)
+## * The \= format allows unescaped regular expressions
+## * Constants referenced by match \= $${__my_const}
+## * Constants can reference other constants
+## * You are free to delete all the default scopes.
+## * Twitter : ainslec , Web: http://eeyo.io/iro
+##
+################################################################
+
+name                   = Xtend
+file_extensions []     = xtend;
+
+################################################################
+## Styles
+################################################################
+
+styles [] {
+
+.comment : style {
+   color                 = light_green
+   italic                = true
+   ace_scope             = comment
+   textmate_scope        = comment
+   pygments_scope        = Comment
+}
+
+.keyword : style {
+   color                 = violet_red
+   ace_scope             = keyword
+   textmate_scope        = keyword
+   pygments_scope        = Keyword
+}
+
+.name : style {
+   color                 = white
+   ace_scope             = entity.name
+   textmate_scope        = entity.name
+   pygments_scope        = Name.Entity
+}
+
+.annotation : style {
+   color                 = gold
+   ace_scope             = support.type
+   textmate_scope        = support.type
+   pygments_scope        = Name.Attribute
+}
+
+.punctuation : style {
+   color                 = red
+   ace_scope             = punctuation
+   textmate_scope        = punctuation
+   pygments_scope        = Punctuation
+}
+
+.operator : style {
+   color                 = yellow
+   ace_scope             = keyword.operator
+   textmate_scope        = keyword.operator
+   pygments_scope        = Operator
+}
+
+.parenthesis : style {
+   color                 = red
+   ace_scope             = keyword.punctutation
+   textmate_scope        = keyword.punctutation
+   pygments_scope        = Punctuation
+}
+
+.text : style {
+   color                 = light_blue
+   ace_scope             = meta.tag string.quoted constant.character.entity
+   textmate_scope        = meta.tag string.quoted constant.character.entity
+   pygments_scope        = String
+}
+
+.template : style {
+   color                 = orange
+   ace_scope             = meta.tag string.quoted constant.character.entity
+   textmate_scope        = meta.tag string.quoted constant.character.entity
+   pygments_scope        = String
+}
+
+
+.illegal : style {
+   color                 = white
+   background_color      = red
+   ace_scope             = invalid
+   textmate_scope        = invalid
+   pygments_scope        = Generic.Error
+}
+
+}
+
+#################################################
+## Parse contexts
+#################################################
+
+contexts [] {
+
+##############################################
+## Main Context - Entry point context
+##############################################
+
+main : context {
+   : include "grammar" ;
+}
+
+grammar : context {
+
+   : include "multi_line_comment" ;
+   : include "single_line_comment" ;
+   
+   : include "File" ;
+   
+   : pattern {
+      regex          \= ([^\s])
+      styles []       = .illegal;
+   }
+   
+}
+
+
+//File returns XtendFile :
+//	('package' package=QualifiedName ';'?)?
+//	importSection=XImportSection?
+//	(xtendTypes+=Type)*
+File: context {
+   : include "GlobalKeywords" ;
+   : include "QualifiedName" ;
+   : pattern {
+      regex          \= (\.\*)
+      styles []       = .operator;
+   }
+   : include "Type" ;
+   
+   : include "Punctuation" ;
+}
+
+Type: context {
+   : include "multi_line_comment" ;
+   : include "single_line_comment" ;
+
+   : include "Annotation";
+   : include "GlobalKeywords";
+   : include "CommonModifier";
+   : include "TypeParameters"; 
+   : include "BracedTypeBody";
+}
+
+BracedTypeBody: context {
+   : inline_push {
+      regex          \= (\{)
+      styles []       = .parenthesis;
+      : pop {
+         regex       \= (\})
+         styles []    = .parenthesis;
+      }
+      : include "TypeMember";
+   }
+}
+
+TypeMember: context {
+   : include "multi_line_comment" ;
+   : include "single_line_comment" ;
+
+   : include "MethodOrFieldDefinition";
+   : include "Type";
+}
+
+MethodOrFieldDefinition: context {
+   : include "Annotation";
+   : include "CommonModifier";
+   : include "FieldOrVarModifier";
+   : include "MethodModifier";
+   : include "TypeParameters";
+   : include "Name";
+   : include "Parameters";
+   : include "ExpressionBody";
+}
+
+ExpressionBody:  context {
+   : inline_push {
+      regex          \= (\{)
+      styles []       = .parenthesis;
+      : pop {
+         regex       \= (\})
+         styles []    = .parenthesis;
+      }
+      : include "multi_line_comment" ;
+      : include "single_line_comment" ;
+      
+      : include "Expression";
+   }
+}
+
+Expression: context {
+      : include "ExpressionKeywords";
+      : include "Operators";
+      : include "Punctuation";
+      : include "StringOrTemplateString";
+      : include "ExpressionBody";
+      : include "ParenthesizedExpression";
+      : include "BracketizedExpression";
+      : include "QualifiedName";
+      : include "Annotation";
+}
+
+ParenthesizedExpression: context {
+   : inline_push {
+      regex          \= (\()
+      styles []       = .parenthesis;
+      : pop {
+         regex       \= (\))
+         styles []    = .parenthesis;
+      }
+      : include "Expression";
+   }
+}
+
+BracketizedExpression: context {
+   : inline_push {
+      regex          \= (\[)
+      styles []       = .parenthesis;
+      : pop {
+         regex       \= (\])
+         styles []    = .parenthesis;
+      }
+      : pattern {
+         regex       \= (\bit\b)
+         styles []    = .keyword ; 
+      }
+      : include "Expression";
+   }
+}
+
+ExpressionKeywords: context {
+   : pattern {
+      regex       \= (\btry\b)|(\bcatch\b)|(\bfinally\b)|(\breturn\b)|(\bnew\b)|(\bswitch\b)|(\bcase\b)|(\bdefault\b)|(\bif\b)|(\belse\b)|(\bwhile\b)|(\bfor\b)
+      styles []    = .keyword ; 
+   }
+   : include "FieldOrVarModifier";
+}
+
+Parameters: context {
+   : inline_push {
+      regex          \= (\()
+      styles []       = .parenthesis;
+      : pop {
+         regex       \= (\))
+         styles []    = .parenthesis;
+      }
+      : include "Annotation";
+      : include "QualifiedName";
+      : include "Punctuation";
+   }
+}
+
+TypeParameters: context {
+   : inline_push {
+      regex          \= (<)
+      styles []       = .parenthesis;
+      : pop {
+         regex       \= (>)
+         styles []    = .parenthesis;
+      }
+      : include "Name";
+      : include "TypeParameters";
+   }
+}
+
+CommonModifier: context {
+   : pattern {
+      regex       \= (\bpublic\b)|(\bprivate\b)|(\bprotected\b)|(\bpackage\b)|(\babstract\b)|(\bstatic\b)|(\bdispatch\b)|(\bfinal\b)|(\bstrictfp\b)|(\bnative\b)|(\bvolatile\b)|(\bsynchronized\b)|(\btransient\b)
+      styles []    = .keyword ; 
+   }
+}
+
+FieldOrVarModifier: context {
+   : pattern {
+      regex       \= (\bval\b)|(\bvar\b)|(\bextension\b)
+      styles []    = .keyword ; 
+   }
+}
+
+MethodModifier: context {
+   : pattern {
+      regex       \= (\bdef\b)|(\boverride\b)|(\bnew\b)|(\bthrows\b)|(\bcreate\b)
+      styles []    = .keyword ; 
+   }
+}
+
+GlobalKeywords: context {
+   : pattern {
+      regex       \= (\bpackage\b)|(\bimport\b)|(\bclass\b)|(\binterface\b)|(\benum\b)|(\bannotation\b)|(\bextends\b)|(\bimplements\b)|(\bstatic\b)|(\bextension\b)
+      styles []    = .keyword ; 
+   }
+}
+
+Punctuation: context {
+   : pattern { 
+      regex       \= (,|\,|:|;|(\.\.\.)|(\b\|\b))
+      styles []    = .punctuation ;
+   }
+}
+
+Operators: context {
+   : pattern { 
+      regex       \= (#|\*|&|\?|\*|\+|(===)|(==)|=|&|!|(=>)|(->)|(\+=)|(\?=)|(\.\.)|(\->)|\||(\|\|))|(\binstanceof\b)
+      styles []    = .operator ;
+   }
+}
+
+QualifiedName : context {
+   : pattern {
+      regex          \= (\b\w+(\.|\$\w+)*\b)
+      styles []       = .name;
+   }
+}
+
+Name : context {
+   description = for ^ escaped names 
+   : pattern {
+      regex       \= (\^?\w+)
+      styles []    = .name;
+   }
+}
+
+Annotation : context {
+   : pattern {
+      regex       \= (@\w+)
+      styles []    = .annotation ;
+   }
+   : inline_push {
+      regex          \= (\()
+      styles []       = .parenthesis;
+      : pop {
+         regex       \= (\))
+         styles []    = .parenthesis;
+      }
+      : include "Operators";
+      : include "Punctuation";
+      : include "Expression";
+   }
+}
+
+###########################################
+## Terminals
+###########################################
+
+single_line_comment : context {
+   description        = singleline comment
+   : pattern {
+      regex          \= (//.*)
+      styles []       = .comment;
+   }
+}
+
+
+multi_line_comment : context {
+   description        = multiline comment
+   : inline_push {
+      regex          \= (/\*)
+      styles []       = .comment;
+      default_style   = .comment
+      : pop {
+         regex       \= (\*/)
+         styles []    = .comment;
+      }
+   }
+}
+
+STRING : context {
+   description       = quoted string
+   : inline_push {
+      regex          \= (\")
+      styles []       = .text;
+      default_style   = .text
+      : pop {
+         regex       \= (\")
+         styles []    = .text;
+      }
+   }
+   : inline_push {
+      regex          \= (\')
+      styles []       = .text;
+      default_style   = .text
+      : pop {
+         regex       \= (\')
+         styles []    = .text;
+      }
+   }
+}
+
+StringOrTemplateString: context {
+   :include "TemplateString";
+   :include "STRING";
+}
+
+TemplateString : context {
+   description       = Xtend template string
+   : inline_push {
+      regex          \= (\'\'\')
+      styles []       = .template;
+      : pop {
+         regex       \= (\'\'\')
+         styles []    = .template;
+      }
+      : include "TEMPLATE_TEXT";
+      : include "TemplateExpression";
+   }
+}
+
+TemplateExpression : context {
+   description       = Xtend template string before template placeholder expression
+   : inline_push {
+      regex          \= («)
+      styles []       = .parenthesis;
+      : pop {
+         regex       \= (»)
+         styles []    = .parenthesis;
+      }
+      : include "Expression";
+   }
+}
+
+TEMPLATE_TEXT: context {
+   description        = RICH_TEXT_START
+   : pattern {
+      regex          \= ([^«])
+      styles []       = .template;
+   }
+}
+
+//terminal COMMENT_RICH_TEXT_INBETWEEN: "««" !('\n'|'\r')* ('\r'? '\n' IN_RICH_STRING* ("'" "'"?)? '«')?;
+//terminal COMMENT_RICH_TEXT_END: "««" !('\n'|'\r')* (('\r'? '\n' IN_RICH_STRING* ("'''"| ("'" "'"?)? EOF)) | EOF);
+
+
+
+}
+
