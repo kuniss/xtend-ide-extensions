@@ -30,6 +30,12 @@
             "language": "xtend",
             "scopeName": "source.Xtend",
             "path": "./syntaxes/xtend.tmLanguage.json"
-        }]
+        }],
+        "snippets": [
+			{
+				"language": "xtend",
+				"path": "./snippets.json"
+			}
+		]
     }
 }

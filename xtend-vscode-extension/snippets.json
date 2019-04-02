@@ -1,0 +1,45 @@
+{
+	"class definition": {
+		"prefix": "class",
+		"body": [
+      "class $1 extends $2 {",
+      "  $3",
+			"}"
+		],
+		"description": "Creates an empty class definition"
+  },
+  "interface definition": {
+		"prefix": "interface",
+		"body": [
+			"interface $1 {",
+			"  $2",
+			"}"
+		],
+		"description": "Creates an empty interface definition"
+  },
+  "method defintion": {
+		"prefix": "def",
+		"body": [
+      "def $1($2) {",
+      "  $3",
+			"}"
+		],
+		"description": "Creates a ordinary method definition"
+  },
+  "template method defintion": {
+		"prefix": "def",
+		"body": [
+      "def $1($2) '''",
+      "  $3 «$4»",
+			"'''"
+		],
+		"description": "Creates a template method definition"
+	},
+	"french quotes": {
+		"prefix": "<<",
+		"body": [
+      "«$1»"
+		],
+		"description": "Creates french quotes «» inside template strings"
+  }
+}
