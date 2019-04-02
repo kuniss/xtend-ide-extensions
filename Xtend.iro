@@ -45,7 +45,7 @@ styles [] {
 }
 
 .name : style {
-   color                 = white
+   color                 = light_yellow
    ace_scope             = entity.name
    textmate_scope        = entity.name
    pygments_scope        = Name.Entity
@@ -59,7 +59,7 @@ styles [] {
 }
 
 .punctuation : style {
-   color                 = red
+   color                 = violet
    ace_scope             = punctuation
    textmate_scope        = punctuation
    pygments_scope        = Punctuation
@@ -73,10 +73,10 @@ styles [] {
 }
 
 .parenthesis : style {
-   color                 = red
+   color                 = violet
    ace_scope             = keyword.punctutation
    textmate_scope        = keyword.punctutation
-   pygments_scope        = Punctuation
+   pygments_scope        = Keyword.Reserved
 }
 
 .text : style {
@@ -88,9 +88,9 @@ styles [] {
 
 .template : style {
    color                 = light_blue
-   ace_scope             = meta.tag string.quoted constant.character.entity
-   textmate_scope        = meta.tag string.quoted constant.character.entity
-   pygments_scope        = String
+   ace_scope             = meta.tag string.quoted
+   textmate_scope        = meta.tag string.quoted
+   pygments_scope        = String.Other
 }
 
 
@@ -120,8 +120,8 @@ main : context {
 
 grammar : context {
 
-   : include "multi_line_comment" ;
-   : include "single_line_comment" ;
+   : include "MultiLineComment" ;
+   : include "SingleLineComment" ;
    
    : include "File" ;
    
@@ -133,10 +133,6 @@ grammar : context {
 }
 
 
-//File returns XtendFile :
-//	('package' package=QualifiedName ';'?)?
-//	importSection=XImportSection?
-//	(xtendTypes+=Type)*
 File: context {
    : include "GlobalKeywords" ;
    : include "QualifiedName" ;
@@ -150,8 +146,8 @@ File: context {
 }
 
 Type: context {
-   : include "multi_line_comment" ;
-   : include "single_line_comment" ;
+   : include "MultiLineComment" ;
+   : include "SingleLineComment" ;
 
    : include "Annotation";
    : include "GlobalKeywords";
@@ -173,8 +169,8 @@ BracedTypeBody: context {
 }
 
 TypeMember: context {
-   : include "multi_line_comment" ;
-   : include "single_line_comment" ;
+   : include "MultiLineComment" ;
+   : include "SingleLineComment" ;
 
    : include "MethodOrFieldDefinition";
    : include "Type";
@@ -192,8 +188,8 @@ MethodOrFieldDefinition: context {
 }
 
 Expression: context {
-      : include "multi_line_comment" ;
-      : include "single_line_comment" ;
+      : include "MultiLineComment" ;
+      : include "SingleLineComment" ;
       : include "ExpressionKeywords";
       : include "Operators";
       : include "Punctuation";
@@ -360,7 +356,7 @@ Annotation : context {
 ## Terminals
 ###########################################
 
-single_line_comment : context {
+SingleLineComment : context {
    description        = singleline comment
    : pattern {
       regex          \= (//.*)
@@ -369,7 +365,7 @@ single_line_comment : context {
 }
 
 
-multi_line_comment : context {
+MultiLineComment : context {
    description        = multiline comment
    : inline_push {
       regex          \= (/\*)
@@ -382,7 +378,7 @@ multi_line_comment : context {
    }
 }
 
-STRING : context {
+String : context {
    description       = quoted string
    : inline_push {
       regex          \= (\")
@@ -406,7 +402,7 @@ STRING : context {
 
 StringOrTemplateString: context {
    :include "TemplateString";
-   :include "STRING";
+   :include "String";
 }
 
 TemplateString : context {
