@@ -21,14 +21,16 @@
 		"Annotation": {
 			"patterns": [
 				{
-					"match": "(@\\w+)",
-					"name": "support.type.Xtend"
-				},
-				{
-					"begin": "(\\()",
+					"begin": "(@\\^?\\w+(?:(?:\\.|\\$)\\w+)*)(\\s*)(\\()",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "support.type.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "keyword punctuation.Xtend"
 						}
 					},
 					"patterns": [
@@ -39,9 +41,13 @@
 					"end": "(\\))",
 					"endCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					}
+				},
+				{
+					"match": "(@\\^?\\w+(?:(?:\\.|\\$)\\w+)*)",
+					"name": "support.type.Xtend"
 				}
 			]
 		},
@@ -64,7 +70,7 @@
 					"begin": "(\\{)",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					},
 					"patterns": [
@@ -75,7 +81,7 @@
 					"end": "(\\})",
 					"endCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					}
 				}
@@ -94,7 +100,7 @@
 					"begin": "(\\{)",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					},
 					"patterns": [
@@ -105,7 +111,7 @@
 					"end": "(\\})",
 					"endCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					}
 				}
@@ -124,7 +130,7 @@
 					"begin": "(\\[)",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					},
 					"patterns": [
@@ -135,7 +141,7 @@
 					"end": "(\\])",
 					"endCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					}
 				}
@@ -155,8 +161,8 @@
 		"CommonModifier": {
 			"patterns": [
 				{
-					"match": "(\\bpublic\\b)|(\\bprivate\\b)|(\\bprotected\\b)|(\\bpackage\\b)|(\\babstract\\b)|(\\bstatic\\b)|(\\bdispatch\\b)|(\\bfinal\\b)|(\\bstrictfp\\b)|(\\bnative\\b)|(\\bvolatile\\b)|(\\bsynchronized\\b)|(\\btransient\\b)|(\\bboolean\\b)|(\\bint\\b)|(\\bfloat\\b)|(\\bdouble\\b)|(\\bchar\\b)",
-					"name": "keyword.Xtend"
+					"match": "(\\bpublic\\b|\\bprivate\\b|\\bprotected\\b|\\bpackage\\b|\\babstract\\b|\\bstatic\\b|\\bdispatch\\b|\\bfinal\\b|\\bstrictfp\\b|\\bnative\\b|\\bvolatile\\b|\\bsynchronized\\b|\\btransient\\b|\\bextension\\b)",
+					"name": "storage.modifier.Xtend"
 				}
 			]
 		},
@@ -200,33 +206,114 @@
 		"ExpressionKeywords": {
 			"patterns": [
 				{
-					"match": "(\\btry\\b)|(\\bcatch\\b)|(\\bfinally\\b)|(\\breturn\\b)|(\\bnew\\b)|(\\bswitch\\b)|(\\bcase\\b)|(\\bdefault\\b)|(\\bif\\b)|(\\belse\\b)|(\\bwhile\\b)|(\\bfor\\b)|(\\bdo\\b)|(\\bsuper\\b)|(\\btrue\\b)|(\\bfalse\\b)|(\\bnull\\b)|(\\btypeof\\b)|(\\bthrow\\b)|(\\bsynchronized\\b)",
-					"name": "keyword.Xtend"
+					"match": "(\\btry\\b|\\bcatch\\b|\\bfinally\\b|\\breturn\\b|\\bnew\\b|\\bswitch\\b|\\bcase\\b|\\bdefault\\b|\\bif\\b|\\belse\\b|\\bwhile\\b|\\bfor\\b|\\bdo\\b|\\bthrow\\b|\\bsynchronized|\\bthrow\\b|\\bsynchronized\\b\\b)",
+					"name": "keyword.control.Xtend"
 				},
 				{
-					"include": "#FieldOrVarModifier"
+					"match": "(\\bsuper\\b|\\btrue\\b|\\bfalse\\b|\\bnull\\b|\\btypeof\\b)",
+					"name": "constant.language.Xtend"
+				},
+				{
+					"include": "#Number"
+				},
+				{
+					"include": "#FieldOrVarDecl"
 				}
 			]
 		},
-		"FieldOrVarModifier": {
+		"FieldOrVarDecl": {
 			"patterns": [
 				{
-					"match": "(\\bval\\b)|(\\bvar\\b)|(\\bextension\\b)",
-					"name": "keyword.Xtend"
+					"match": "(\\bval\\b|\\bvar\\b)(\\s+)(\\bboolean\\b|\\bint\\b|\\bfloat\\b|\\bdouble\\b|\\bchar\\b|\\bvoid\\b)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b)",
+					"captures": {
+						"1": {
+							"name": "storage.type.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "keyword.other.Xtend"
+						},
+						"4": {
+							"name": "whitespace.Xtend"
+						},
+						"5": {
+							"name": "variable.Xtend"
+						}
+					}
+				},
+				{
+					"match": "(\\bval\\b|\\bvar\\b|\\bextension\\b)(\\s+)(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b)",
+					"captures": {
+						"1": {
+							"name": "storage.type.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "entity.name.Xtend"
+						},
+						"4": {
+							"name": "whitespace.Xtend"
+						},
+						"5": {
+							"name": "variable.Xtend"
+						}
+					}
+				},
+				{
+					"match": "(\\bval\\b|\\bvar\\b|\\bextension\\b)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b)",
+					"captures": {
+						"1": {
+							"name": "storage.type.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "variable.Xtend"
+						}
+					}
+				},
+				{
+					"match": "(\\bboolean\\b|\\bint\\b|\\bfloat\\b|\\bdouble\\b|\\bchar\\b|\\bvoid\\b)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b(?!\\s*\\())",
+					"captures": {
+						"1": {
+							"name": "keyword.other.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "variable.Xtend"
+						}
+					}
+				},
+				{
+					"match": "(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b(?=\\s*=))",
+					"captures": {
+						"1": {
+							"name": "entity.name.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "variable.Xtend"
+						}
+					}
 				}
 			]
 		},
 		"File": {
 			"patterns": [
 				{
-					"include": "#GlobalKeywords"
+					"include": "#PackageDecl"
 				},
 				{
-					"include": "#QualifiedName"
-				},
-				{
-					"match": "(\\.\\*)",
-					"name": "keyword.operator.Xtend"
+					"include": "#XImportSection"
 				},
 				{
 					"include": "#Type"
@@ -236,35 +323,46 @@
 				}
 			]
 		},
-		"GlobalKeywords": {
+		"InheritedDecl": {
 			"patterns": [
 				{
-					"match": "(\\bpackage\\b)|(\\bimport\\b)|(\\bclass\\b)|(\\binterface\\b)|(\\benum\\b)|(\\bannotation\\b)|(\\bextends\\b)|(\\bimplements\\b)|(\\bstatic\\b)|(\\bextension\\b)",
-					"name": "keyword.Xtend"
+					"match": "(\\bextends\\b|\\bimplements\\b)(\\s+)(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)",
+					"captures": {
+						"1": {
+							"name": "keyword.other.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "entity.inherited-class.Xtend"
+						}
+					}
 				}
 			]
 		},
-		"MethodModifier": {
+		"MethodDecl": {
 			"patterns": [
-				{
-					"match": "(\\bdef\\b)|(\\boverride\\b)|(\\bnew\\b)|(\\bthrows\\b)|(\\bcreate\\b)",
-					"name": "keyword.Xtend"
-				}
-			]
-		},
-		"MethodOrFieldDefinition": {
-			"patterns": [
-				{
-					"include": "#Annotation"
-				},
-				{
-					"include": "#CommonModifier"
-				},
-				{
-					"include": "#FieldOrVarModifier"
-				},
 				{
 					"include": "#MethodModifier"
+				},
+				{
+					"match": "(\\bboolean\\b|\\bint\\b|\\bfloat\\b|\\bdouble\\b|\\bchar\\b|\\bvoid\\b)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b(?=\\())",
+					"captures": {
+						"1": {
+							"name": "keyword.other.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "entity.name.function.Xtend"
+						}
+					}
+				},
+				{
+					"match": "(\\b\\^?(?:[\\w\\d])+\\b(?=\\())",
+					"name": "entity.name.function.Xtend"
 				},
 				{
 					"include": "#TypeParameters"
@@ -274,9 +372,30 @@
 				},
 				{
 					"include": "#Expression"
+				}
+			]
+		},
+		"MethodModifier": {
+			"patterns": [
+				{
+					"match": "(\\bdef\\b|\\boverride\\b|\\bnew\\b|\\bthrows\\b|\\bcreate\\b)",
+					"name": "keyword.other.Xtend"
+				}
+			]
+		},
+		"MethodOrFieldDecl": {
+			"patterns": [
+				{
+					"include": "#Annotation"
 				},
 				{
-					"include": "#Name"
+					"include": "#CommonModifier"
+				},
+				{
+					"include": "#MethodDecl"
+				},
+				{
+					"include": "#FieldOrVarDecl"
 				}
 			]
 		},
@@ -286,14 +405,14 @@
 					"begin": "(\/\\*)",
 					"beginCaptures": {
 						"1": {
-							"name": "comment.Xtend"
+							"name": "comment.block.Xtend"
 						}
 					},
-					"contentName": "comment.Xtend",
+					"contentName": "comment.block.Xtend",
 					"end": "(\\*\/)",
 					"endCaptures": {
 						"1": {
-							"name": "comment.Xtend"
+							"name": "comment.block.Xtend"
 						}
 					}
 				}
@@ -305,8 +424,16 @@
 		"Name": {
 			"patterns": [
 				{
-					"match": "(\\^?\\w+)",
+					"match": "(\\b\\^?(?:[\\w\\d])+\\b)",
 					"name": "entity.name.Xtend"
+				}
+			]
+		},
+		"Number": {
+			"patterns": [
+				{
+					"match": "((?:0x[\\dABCDEFabcdef]+[Ll]?)|\\d+\\.?\\d]*[LlFfdD]?)",
+					"name": "constant.numeric.Xtend"
 				}
 			]
 		},
@@ -318,13 +445,31 @@
 				}
 			]
 		},
+		"PackageDecl": {
+			"patterns": [
+				{
+					"match": "(\\bpackage\\b)(\\s+)(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)",
+					"captures": {
+						"1": {
+							"name": "keyword.other.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "entity.name.section.Xtend"
+						}
+					}
+				}
+			]
+		},
 		"Parameters": {
 			"patterns": [
 				{
 					"begin": "(\\()",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					},
 					"patterns": [
@@ -335,7 +480,7 @@
 					"end": "(\\))",
 					"endCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					}
 				}
@@ -347,7 +492,24 @@
 					"include": "#Annotation"
 				},
 				{
-					"include": "#QualifiedName"
+					"match": "((?:\\bextension\\b)?)(\\s*)(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b)",
+					"captures": {
+						"1": {
+							"name": "keyword.other.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "entity.name.Xtend"
+						},
+						"4": {
+							"name": "whitespace.Xtend"
+						},
+						"5": {
+							"name": "variable.parameter.Xtend"
+						}
+					}
 				},
 				{
 					"include": "#Punctuation"
@@ -360,7 +522,7 @@
 					"begin": "(\\()",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					},
 					"patterns": [
@@ -371,7 +533,7 @@
 					"end": "(\\))",
 					"endCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					}
 				}
@@ -387,7 +549,7 @@
 		"Punctuation": {
 			"patterns": [
 				{
-					"match": "(,|\\,|:|;|(\\.\\.\\.)|(\\b\\|\\b))",
+					"match": "(,|\\,|:|;|\\.\\.\\.|\\|)",
 					"name": "punctuation.Xtend"
 				}
 			]
@@ -395,7 +557,7 @@
 		"QualifiedName": {
 			"patterns": [
 				{
-					"match": "(\\b\\w+(\\.|\\$\\w+)*\\b)",
+					"match": "(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)",
 					"name": "entity.name.Xtend"
 				}
 			]
@@ -404,7 +566,7 @@
 			"patterns": [
 				{
 					"match": "(\/\/.*)",
-					"name": "comment.Xtend"
+					"name": "comment.line.double-slash.Xtend"
 				}
 			]
 		},
@@ -414,14 +576,14 @@
 					"begin": "(\\\")",
 					"beginCaptures": {
 						"1": {
-							"name": "meta.tag string.quoted constant.character.entity.Xtend"
+							"name": "string.quoted.double.Xtend"
 						}
 					},
-					"contentName": "meta.tag string.quoted constant.character.entity.Xtend",
+					"contentName": "string.quoted.double.Xtend",
 					"end": "(\\\")",
 					"endCaptures": {
 						"1": {
-							"name": "meta.tag string.quoted constant.character.entity.Xtend"
+							"name": "string.quoted.double.Xtend"
 						}
 					}
 				},
@@ -429,14 +591,14 @@
 					"begin": "(\\')",
 					"beginCaptures": {
 						"1": {
-							"name": "meta.tag string.quoted constant.character.entity.Xtend"
+							"name": "string.quoted.single.Xtend"
 						}
 					},
-					"contentName": "meta.tag string.quoted constant.character.entity.Xtend",
+					"contentName": "string.quoted.single.Xtend",
 					"end": "(\\')",
 					"endCaptures": {
 						"1": {
-							"name": "meta.tag string.quoted constant.character.entity.Xtend"
+							"name": "string.quoted.single.Xtend"
 						}
 					}
 				}
@@ -462,7 +624,7 @@
 			"patterns": [
 				{
 					"match": "([^\\x{00ab}])",
-					"name": "meta.tag string.quoted.Xtend"
+					"name": "string.quoted.triple.Xtend"
 				}
 			]
 		},
@@ -470,7 +632,7 @@
 			"patterns": [
 				{
 					"match": "(\u00ab\u00ab[^\\n\\n]*)",
-					"name": "comment.Xtend"
+					"name": "comment.line.double-slash.Xtend"
 				}
 			]
 		},
@@ -480,7 +642,7 @@
 					"begin": "(\u00ab)",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					},
 					"patterns": [
@@ -491,7 +653,7 @@
 					"end": "(\u00bb)",
 					"endCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					}
 				}
@@ -510,7 +672,7 @@
 		"TemplateKeywords": {
 			"patterns": [
 				{
-					"match": "(\\bFOR\\b)|(\\bBEFORE\\b)|(\\bSEPARATOR\\b)|(\\bAFTER\\b)|(\\bENDFOR\\b)|(\\bIF\\b)|(\\bELSE\\b)|(\\bELSEIF\\b)|(\\bENDIF\\b)",
+					"match": "(\\bFOR\\b|\\bBEFORE\\b|\\bSEPARATOR\\b|\\bAFTER\\b|\\bENDFOR\\b|\\bIF\\b|\\bELSE\\b|\\bELSEIF\\b|\\bENDIF\\b)",
 					"name": "keyword.Xtend"
 				}
 			]
@@ -521,7 +683,7 @@
 					"begin": "(\\'\\'\\')",
 					"beginCaptures": {
 						"1": {
-							"name": "meta.tag string.quoted.Xtend"
+							"name": "string.quoted.triple.Xtend"
 						}
 					},
 					"patterns": [
@@ -532,7 +694,7 @@
 					"end": "(\\'\\'\\')",
 					"endCaptures": {
 						"1": {
-							"name": "meta.tag string.quoted.Xtend"
+							"name": "string.quoted.triple.Xtend"
 						}
 					}
 				}
@@ -563,13 +725,43 @@
 					"include": "#Annotation"
 				},
 				{
-					"include": "#GlobalKeywords"
+					"include": "#TypeDecl"
 				},
 				{
 					"include": "#CommonModifier"
 				},
 				{
 					"include": "#TypeParameters"
+				},
+				{
+					"include": "#BracedTypeBody"
+				}
+			]
+		},
+		"TypeDecl": {
+			"patterns": [
+				{
+					"include": "#CommonModifier"
+				},
+				{
+					"match": "(\\bclass\\b|\\binterface\\b|\\benum\\b|\\bannotation\\b)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b)",
+					"captures": {
+						"1": {
+							"name": "storage.type.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "entity.name.type.Xtend"
+						}
+					}
+				},
+				{
+					"include": "#TypeParameters"
+				},
+				{
+					"include": "#InheritedDecl"
 				},
 				{
 					"include": "#BracedTypeBody"
@@ -585,7 +777,7 @@
 					"include": "#SingleLineComment"
 				},
 				{
-					"include": "#MethodOrFieldDefinition"
+					"include": "#MethodOrFieldDecl"
 				},
 				{
 					"include": "#Type"
@@ -598,7 +790,7 @@
 					"begin": "(<)",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					},
 					"patterns": [
@@ -609,7 +801,7 @@
 					"end": "(>)",
 					"endCaptures": {
 						"1": {
-							"name": "keyword.punctutation.Xtend"
+							"name": "keyword punctuation.Xtend"
 						}
 					}
 				}
@@ -622,6 +814,39 @@
 				},
 				{
 					"include": "#TypeParameters"
+				}
+			]
+		},
+		"XImportSection": {
+			"patterns": [
+				{
+					"match": "(\\bimport\\b)(\\s*)((?:\\bstatic\\b)?)(\\s*)((?:\\bextension\\b)?)(\\s*)(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)((?:\\.\\*)?)",
+					"captures": {
+						"1": {
+							"name": "keyword.other.Xtend"
+						},
+						"2": {
+							"name": "whitespace.Xtend"
+						},
+						"3": {
+							"name": "keyword.other.Xtend"
+						},
+						"4": {
+							"name": "whitespace.Xtend"
+						},
+						"5": {
+							"name": "keyword.other.Xtend"
+						},
+						"6": {
+							"name": "whitespace.Xtend"
+						},
+						"7": {
+							"name": "entity.name.Xtend"
+						},
+						"8": {
+							"name": "keyword.operator.Xtend"
+						}
+					}
 				}
 			]
 		},
@@ -638,7 +863,7 @@
 				},
 				{
 					"match": "([^\\s])",
-					"name": "invalid.Xtend"
+					"name": "invalid.illegal.Xtend"
 				}
 			]
 		}

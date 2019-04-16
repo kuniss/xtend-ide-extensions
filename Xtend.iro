@@ -29,34 +29,202 @@ file_extensions []     = xtend;
 
 styles [] {
 
-.comment : style {
+# textmate focused scopes
+
+# comment — for comments.
+
+# // comment
+.comment_line_double_slash : style {
    color                 = light_green
    italic                = true
-   ace_scope             = comment
-   textmate_scope        = comment
-   pygments_scope        = Comment
+   ace_scope             = comment.line.double-slash
+   textmate_scope        = comment.line.double-slash
+   pygments_scope        = Comment.Single
 }
 
+# block — multi-line comments like /* … */ and <!-- … -->. 
+.comment_block : style {
+   color                 = green
+   italic                = true
+   ace_scope             = comment.block
+   textmate_scope        = comment.block
+   pygments_scope        = Comment.Multiline
+}
+
+# numeric — those which represent numbers, e.g. 42, 1.3f, 0x4AB1U.
+.constant_numeric : style {
+   color                 = red
+   ace_scope             = constant.numeric
+   textmate_scope        = constant.numeric
+   pygments_scope        = Number
+}
+
+
+# language — constants (generally) provided by the language which are “special” like true, false, nil, YES, NO, etc.
+.constant_language : style {
+   color                 = violet_red
+   ace_scope             = constant.language
+   textmate_scope        = constant.language
+   pygments_scope        = Literal
+}
+
+# entity — an entity refers to a larger part of the document, for example a chapter, class, function, or tag. We do not scope the entire entity as entity.* (we use meta.* for that). But we do use entity.* for the “placeholders” in the larger entity, e.g. if the entity is a chapter, we would use entity.name.section for the chapter title.
+
+# name — we are naming the larger entity.
+.entity_name : style {
+   color                 = light_yellow
+   ace_scope             = entity.name
+   textmate_scope        = entity.name
+   pygments_scope        = Name
+}
+
+# function — the name of a function.
+.entity_function : style {
+   color                 = light_yellow
+   ace_scope             = entity.name.function
+   textmate_scope        = entity.name.function
+   pygments_scope        = Name.Function
+}
+
+# type — the name of a type declaration or class.
+.entity_type : style {
+   color                 = light_yellow
+   ace_scope             = entity.name.type
+   textmate_scope        = entity.name.type
+   pygments_scope        = Name.Class
+}
+
+# section — the name is the name of a section/heading.
+.entity_section : style {
+   color                 = light_yellow
+   ace_scope             = entity.name.section
+   textmate_scope        = entity.name.section
+   pygments_scope        = Name.Namespace
+}
+
+# inherited-class — the superclass/baseclass name.
+.entity_inherited_class : style {
+   color                 = light_yellow
+   ace_scope             = entity.inherited-class
+   textmate_scope        = entity.inherited-class
+   pygments_scope        = Name.Variable.Class
+}
+
+# illegal — illegal, e.g. an ampersand or lower-than character in HTML (which is not part of an entity/tag).
+.invalid_illegal : style {
+   color                 = red
+   ace_scope             = invalid.illegal
+   textmate_scope        = invalid.illegal
+   pygments_scope        = Generic.Error
+}
+
+
+# keyword — keywords (when these do not fall into the other groups).
 .keyword : style {
    color                 = violet_red
+   bold                  = true
    ace_scope             = keyword
    textmate_scope        = keyword
    pygments_scope        = Keyword
 }
 
-.name : style {
-   color                 = light_yellow
-   ace_scope             = entity.name
-   textmate_scope        = entity.name
+# control — mainly related to flow control like continue, while, return, etc.
+.keyword_control : style {
+   color                 = violet_red
+   bold                  = true
+   ace_scope             = keyword.control
+   textmate_scope        = keyword.control
+   pygments_scope        = Keyword.Reserved
+}
+
+# operator — operators can either be textual (e.g. or) or be characters.
+.keyword_operator : style {
+   color                 = violet_red
+   bold                  = true
+   ace_scope             = keyword.operator
+   textmate_scope        = keyword.operator
+   pygments_scope        = Operator
+}
+
+# other — other keywords.
+.keyword_other : style {
+   color                 = violet_red
+   bold                  = true
+   ace_scope             = keyword.other
+   textmate_scope        = keyword.other
+   pygments_scope        = Keyword.Pseudo
+}
+
+# storage — things relating to “storage”.
+
+# type — the type of something, class, function, int, var, etc.
+.storage_type : style {
+   color                 = violet_red
+   ace_scope             = comment
+   textmate_scope        = storage.type
+   pygments_scope        = Keyword.Type
+}
+
+# modifier — a storage modifier like static, final, abstract, etc.
+.storage_modifier : style {
+   color                 = violet_red
+   ace_scope             = storage.modifier
+   textmate_scope        = storage.modifier
+   pygments_scope        = Keyword.Declaration
+}
+
+# single — single quoted strings: 'foo'.
+.string_quoted_single : style {
+   color                 = light_blue
+   ace_scope             = string.quoted.single
+   textmate_scope        = string.quoted.single
+   pygments_scope        = String.Single
+}
+
+# double — double quoted strings: "foo".
+.string_quoted_double : style {
+   color                 = light_blue
+   ace_scope             = string.quoted.double
+   textmate_scope        = string.quoted.double
+   pygments_scope        = String.Double
+}
+
+# triple — triple quoted strings: """Python""".
+.string_quoted_triple : style {
+   color                 = light_blue
+   ace_scope             = string.quoted.triple
+   textmate_scope        = string.quoted.triple
+   pygments_scope        = String.Symbol
+}
+
+# support — things provided by a framework or library should be below support.
+
+# type — types provided by the framework/library, this is probably only used for languages derived from C, which has typedef (and struct). Most other languages would introduce new types as classes.
+.support_type : style {
+   color                 = light_blue
+   ace_scope             = support.type
+   textmate_scope        = support.type
    pygments_scope        = Name.Entity
 }
 
-.annotation : style {
-   color                 = gold
-   ace_scope             = support.type
-   textmate_scope        = support.type
+# variable — variables. Not all languages allow easy identification (and thus markup) of these.
+.variable : style {
+   color                 = yellow
+   ace_scope             = variable
+   textmate_scope        = variable
+   pygments_scope        = Name.Variable
+}
+
+# parameter — when the variable is declared as the parameter.
+.variable_parameter : style {
+   color                 = yellow
+   ace_scope             = variable.parameter
+   textmate_scope        = variable.parameter
    pygments_scope        = Name.Attribute
 }
+
+# end -- textmate focused scopes
+
 
 .punctuation : style {
    color                 = violet
@@ -65,44 +233,24 @@ styles [] {
    pygments_scope        = Punctuation
 }
 
-.operator : style {
-   color                 = yellow
-   ace_scope             = keyword.operator
-   textmate_scope        = keyword.operator
-   pygments_scope        = Operator
-}
-
 .parenthesis : style {
    color                 = violet
-   ace_scope             = keyword.punctutation
-   textmate_scope        = keyword.punctutation
-   pygments_scope        = Keyword.Reserved
+   ace_scope             = keyword punctuation
+   textmate_scope        = keyword punctuation
+   pygments_scope        = Operator.Word
 }
 
-.text : style {
-   color                 = orange
-   ace_scope             = meta.tag string.quoted constant.character.entity
-   textmate_scope        = meta.tag string.quoted constant.character.entity
-   pygments_scope        = String
-}
-
-.template : style {
-   color                 = light_blue
-   ace_scope             = meta.tag string.quoted
-   textmate_scope        = meta.tag string.quoted
-   pygments_scope        = String.Other
-}
-
-
-.illegal : style {
-   color                 = white
-   background_color      = red
-   ace_scope             = invalid
-   textmate_scope        = invalid
-   pygments_scope        = Generic.Error
+.whitespace : style {
+   ace_scope             = whitespace
+   textmate_scope        = whitespace
+   pygments_scope        = Generic
 }
 
 }
+
+__qualifiedName\=\^?\w+(?:(?:\.|\$)\w+)*
+__Id\=\b\^?(?:[\w\d])+\b
+__predefTypes \= \bboolean\b|\bint\b|\bfloat\b|\bdouble\b|\bchar\b|\bvoid\b
 
 #################################################
 ## Parse contexts
@@ -127,22 +275,33 @@ grammar : context {
    
    : pattern {
       regex          \= ([^\s])
-      styles []       = .illegal;
+      styles []       = .invalid_illegal;
    }
    
 }
 
 
 File: context {
-   : include "GlobalKeywords" ;
-   : include "QualifiedName" ;
-   : pattern {
-      regex          \= (\.\*)
-      styles []       = .operator;
-   }
+   : include "PackageDecl";
+   : include "XImportSection";
+
    : include "Type" ;
    
    : include "Punctuation" ;
+}
+
+PackageDecl: context {
+   : pattern {
+      regex          \= (\bpackage\b)(\s+)($${__qualifiedName})
+      styles []       = .keyword_other, .whitespace, .entity_section;
+   }
+}
+
+XImportSection: context {
+   : pattern {
+      regex          \= (\bimport\b)(\s*)((?:\bstatic\b)?)(\s*)((?:\bextension\b)?)(\s*)($${__qualifiedName})((?:\.\*)?)
+      styles []       = .keyword_other, .whitespace, .keyword_other, .whitespace, .keyword_other, .whitespace, .entity_name, .keyword_operator;
+   }
 }
 
 Type: context {
@@ -150,10 +309,30 @@ Type: context {
    : include "SingleLineComment" ;
 
    : include "Annotation";
-   : include "GlobalKeywords";
+   : include "TypeDecl";
+   
    : include "CommonModifier";
    : include "TypeParameters"; 
    : include "BracedTypeBody";
+}
+
+TypeDecl: context {
+   : include "CommonModifier";
+   : pattern {
+      regex          \= (\bclass\b|\binterface\b|\benum\b|\bannotation\b)(\s+)($${__Id})
+      styles []       = .storage_type, .whitespace, .entity_type;
+   }
+   
+   : include "TypeParameters";
+   : include "InheritedDecl";
+   : include "BracedTypeBody";
+}
+
+InheritedDecl: context {
+   : pattern {
+      regex       \= (\bextends\b|\bimplements\b)(\s+)($${__qualifiedName})
+      styles []    = .keyword_other, .whitespace, .entity_inherited_class ; 
+   }
 }
 
 BracedTypeBody: context {
@@ -172,19 +351,66 @@ TypeMember: context {
    : include "MultiLineComment" ;
    : include "SingleLineComment" ;
 
-   : include "MethodOrFieldDefinition";
+   : include "MethodOrFieldDecl";
    : include "Type";
 }
 
-MethodOrFieldDefinition: context {
+MethodOrFieldDecl: context {
    : include "Annotation";
    : include "CommonModifier";
-   : include "FieldOrVarModifier";
+   : include "MethodDecl";
+   : include "FieldOrVarDecl";
+}
+
+FieldOrVarDecl: context {
+   : pattern {
+      regex       \= (\bval\b|\bvar\b)(\s+)($${__predefTypes})(\s+)($${__Id})
+      styles []    = .storage_type, .whitespace, .keyword_other, .whitespace, .variable; 
+   }
+   : pattern {
+      regex       \= (\bval\b|\bvar\b|\bextension\b)(\s+)($${__qualifiedName})(\s+)($${__Id})
+      styles []    = .storage_type, .whitespace, .entity_name, .whitespace, .variable; 
+   }
+      : pattern {
+      regex       \= (\bval\b|\bvar\b|\bextension\b)(\s+)($${__Id})
+      styles []    = .storage_type, .whitespace, .variable; 
+   }
+   : pattern {
+      regex       \= ($${__predefTypes})(\s+)($${__Id}(?!\s*\())
+      styles []    = .keyword_other, .whitespace, .variable; 
+   }
+   : pattern {
+      regex       \= ($${__qualifiedName})(\s+)($${__Id}(?=\s*=))
+      styles []    = .entity_name, .whitespace, .variable; 
+   }
+   // would be nice, but too gernic, covers too keywords in Template expressions 
+//   : pattern {
+//      regex       \= ($${__qualifiedName})(\s+)($${__Id}(?!\s*\())
+//      styles []    = .entity_name, .whitespace, .variable; 
+//   }
+}
+
+MethodDecl: context {
    : include "MethodModifier";
+   : pattern {
+      regex       \= ($${__predefTypes})(\s+)($${__Id}(?=\())
+      styles []    = .keyword_other, .whitespace, .entity_function; 
+   }
+   : pattern {
+      regex       \= ($${__Id}(?=\())
+      styles []    = .entity_function ; 
+   }
    : include "TypeParameters";
    : include "Parameters";
    : include "Expression";
-   : include "Name";
+}
+
+
+MethodModifier: context {
+   : pattern {
+      regex       \= (\bdef\b|\boverride\b|\bnew\b|\bthrows\b|\bcreate\b)
+      styles []    = .keyword_other; 
+   }
 }
 
 Expression: context {
@@ -244,10 +470,22 @@ BracketizedExpression: context {
 
 ExpressionKeywords: context {
    : pattern {
-      regex       \= (\btry\b)|(\bcatch\b)|(\bfinally\b)|(\breturn\b)|(\bnew\b)|(\bswitch\b)|(\bcase\b)|(\bdefault\b)|(\bif\b)|(\belse\b)|(\bwhile\b)|(\bfor\b)|(\bdo\b)|(\bsuper\b)|(\btrue\b)|(\bfalse\b)|(\bnull\b)|(\btypeof\b)|(\bthrow\b)|(\bsynchronized\b)
-      styles []    = .keyword ; 
+      regex       \= (\btry\b|\bcatch\b|\bfinally\b|\breturn\b|\bnew\b|\bswitch\b|\bcase\b|\bdefault\b|\bif\b|\belse\b|\bwhile\b|\bfor\b|\bdo\b|\bthrow\b|\bsynchronized|\bthrow\b|\bsynchronized\b\b)
+      styles []    = .keyword_control ; 
    }
-   : include "FieldOrVarModifier";
+   : pattern {
+      regex       \= (\bsuper\b|\btrue\b|\bfalse\b|\bnull\b|\btypeof\b)
+      styles []    = .constant_language ; 
+   }
+   : include "Number";
+   : include "FieldOrVarDecl";
+}
+
+Number: context {
+   : pattern { 
+      regex       \= ((?:0x[\dABCDEFabcdef]+[Ll]?)|\d+\.?\d]*[LlFfdD]?)
+      styles []    = .constant_numeric ;
+   }
 }
 
 Parameters: context {
@@ -259,7 +497,10 @@ Parameters: context {
          styles []    = .parenthesis;
       }
       : include "Annotation";
-      : include "QualifiedName";
+      : pattern {
+         regex       \= ((?:\bextension\b)?)(\s*)($${__qualifiedName})(\s+)($${__Id})
+         styles []    = .keyword_other, .whitespace, .entity_name, .whitespace,  .variable_parameter; 
+      }
       : include "Punctuation";
    }
 }
@@ -279,35 +520,15 @@ TypeParameters: context {
 
 CommonModifier: context {
    : pattern {
-      regex       \= (\bpublic\b)|(\bprivate\b)|(\bprotected\b)|(\bpackage\b)|(\babstract\b)|(\bstatic\b)|(\bdispatch\b)|(\bfinal\b)|(\bstrictfp\b)|(\bnative\b)|(\bvolatile\b)|(\bsynchronized\b)|(\btransient\b)|(\bboolean\b)|(\bint\b)|(\bfloat\b)|(\bdouble\b)|(\bchar\b)
-      styles []    = .keyword ; 
+      regex       \= (\bpublic\b|\bprivate\b|\bprotected\b|\bpackage\b|\babstract\b|\bstatic\b|\bdispatch\b|\bfinal\b|\bstrictfp\b|\bnative\b|\bvolatile\b|\bsynchronized\b|\btransient\b|\bextension\b)
+      styles []    = .storage_modifier ; 
    }
 }
 
-FieldOrVarModifier: context {
-   : pattern {
-      regex       \= (\bval\b)|(\bvar\b)|(\bextension\b)
-      styles []    = .keyword ; 
-   }
-}
-
-MethodModifier: context {
-   : pattern {
-      regex       \= (\bdef\b)|(\boverride\b)|(\bnew\b)|(\bthrows\b)|(\bcreate\b)
-      styles []    = .keyword ; 
-   }
-}
-
-GlobalKeywords: context {
-   : pattern {
-      regex       \= (\bpackage\b)|(\bimport\b)|(\bclass\b)|(\binterface\b)|(\benum\b)|(\bannotation\b)|(\bextends\b)|(\bimplements\b)|(\bstatic\b)|(\bextension\b)
-      styles []    = .keyword ; 
-   }
-}
 
 Punctuation: context {
    : pattern { 
-      regex       \= (,|\,|:|;|(\.\.\.)|(\b\|\b))
+      regex       \= (,|\,|:|;|\.\.\.|\|)
       styles []    = .punctuation ;
    }
 }
@@ -315,33 +536,29 @@ Punctuation: context {
 Operators: context {
    : pattern { 
       regex       \= (#|\*|&|\?|\*|\+|(===)|(==)|=|&|!|(=>)|(->)|(\+=)|(\?=)|(\.\.)|(\->)|<|>|\||(\|\|))|(\binstanceof\b)
-      styles []    = .operator ;
+      styles []    = .keyword_operator ;
    }
 }
 
 QualifiedName : context {
    : pattern {
-      regex          \= (\b\w+(\.|\$\w+)*\b)
-      styles []       = .name;
+      regex          \= ($${__qualifiedName})
+      styles []       = .entity_name;
    }
 }
 
 Name : context {
    description = for ^ escaped names 
    : pattern {
-      regex       \= (\^?\w+)
-      styles []    = .name;
+      regex       \= ($${__Id})
+      styles []    = .entity_name;
    }
 }
 
 Annotation : context {
-   : pattern {
-      regex       \= (@\w+)
-      styles []    = .annotation ;
-   }
    : inline_push {
-      regex          \= (\()
-      styles []       = .parenthesis;
+      regex          \= (@$${__qualifiedName})(\s*)(\()
+      styles []       = .support_type, .whitespace, .parenthesis;
       : pop {
          regex       \= (\))
          styles []    = .parenthesis;
@@ -349,6 +566,10 @@ Annotation : context {
       : include "Operators";
       : include "Punctuation";
       : include "Expression";
+   }
+   : pattern {
+      regex       \= (@$${__qualifiedName})
+      styles []    = .support_type ;
    }
 }
 
@@ -360,7 +581,7 @@ SingleLineComment : context {
    description        = singleline comment
    : pattern {
       regex          \= (//.*)
-      styles []       = .comment;
+      styles []       = .comment_line_double_slash;
    }
 }
 
@@ -369,11 +590,11 @@ MultiLineComment : context {
    description        = multiline comment
    : inline_push {
       regex          \= (/\*)
-      styles []       = .comment;
-      default_style   = .comment
+      styles []       = .comment_block;
+      default_style   = .comment_block
       : pop {
          regex       \= (\*/)
-         styles []    = .comment;
+         styles []    = .comment_block;
       }
    }
 }
@@ -382,20 +603,20 @@ String : context {
    description       = quoted string
    : inline_push {
       regex          \= (\")
-      styles []       = .text;
-      default_style   = .text
+      styles []       = .string_quoted_double;
+      default_style   = .string_quoted_double
       : pop {
          regex       \= (\")
-         styles []    = .text;
+         styles []    = .string_quoted_double;
       }
    }
    : inline_push {
       regex          \= (\')
-      styles []       = .text;
-      default_style   = .text
+      styles []       = .string_quoted_single;
+      default_style   = .string_quoted_single
       : pop {
          regex       \= (\')
-         styles []    = .text;
+         styles []    = .string_quoted_single;
       }
    }
 }
@@ -409,10 +630,10 @@ TemplateString : context {
    description       = Xtend template string
    : inline_push {
       regex          \= (\'\'\')
-      styles []       = .template;
+      styles []       = .string_quoted_triple;
       : pop {
          regex       \= (\'\'\')
-         styles []    = .template;
+         styles []    = .string_quoted_triple;
       }
       : include "TemplateComment";
       : include "TEMPLATE_TEXT";
@@ -438,7 +659,7 @@ TemplateExpression : context {
 
 TemplateKeywords: context {
    : pattern {
-      regex          \= (\bFOR\b)|(\bBEFORE\b)|(\bSEPARATOR\b)|(\bAFTER\b)|(\bENDFOR\b)|(\bIF\b)|(\bELSE\b)|(\bELSEIF\b)|(\bENDIF\b)
+      regex          \= (\bFOR\b|\bBEFORE\b|\bSEPARATOR\b|\bAFTER\b|\bENDFOR\b|\bIF\b|\bELSE\b|\bELSEIF\b|\bENDIF\b)
       styles []       = .keyword;
    }
 }
@@ -447,7 +668,7 @@ TEMPLATE_TEXT: context {
    description        = text in Xtend template expressions
    : pattern {
       regex          \= ([^«])
-      styles []       = .template;
+      styles []       = .string_quoted_triple;
    }
 }
 
@@ -457,7 +678,7 @@ TemplateComment: context {
    description        = comments in Xtend template expressions
    : pattern {
       regex          \= (««[^\n\r]*)
-      styles []       = .comment;
+      styles []       = .comment_line_double_slash;
    }
 }
 
