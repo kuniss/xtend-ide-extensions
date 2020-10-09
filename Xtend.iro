@@ -325,14 +325,24 @@ TypeDecl: context {
    
    : include "TypeParameters";
    : include "InheritedDecl";
+   : include "ImplementsDecl";
    : include "BracedTypeBody";
 }
 
 InheritedDecl: context {
    : pattern {
-      regex       \= (\bextends\b|\bimplements\b)(\s+)($${__qualifiedName})
+      regex       \= (\bextends\b)(\s+)($${__qualifiedName})
       styles []    = .keyword_other, .whitespace, .entity_inherited_class ; 
    }
+}
+
+ImplementsDecl: context {
+   : pattern {
+      regex       \= (\bimplements\b)
+      styles []    = .keyword_other ; 
+   }
+   : include "Punctuation";
+   : include "QualifiedName";
 }
 
 BracedTypeBody: context {

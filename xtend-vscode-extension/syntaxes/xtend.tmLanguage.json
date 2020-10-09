@@ -323,10 +323,24 @@
 				}
 			]
 		},
+		"ImplementsDecl": {
+			"patterns": [
+				{
+					"match": "(\\bimplements\\b)",
+					"name": "keyword.other.Xtend"
+				},
+				{
+					"include": "#Punctuation"
+				},
+				{
+					"include": "#QualifiedName"
+				}
+			]
+		},
 		"InheritedDecl": {
 			"patterns": [
 				{
-					"match": "(\\bextends\\b|\\bimplements\\b)(\\s+)(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)",
+					"match": "(\\bextends\\b)(\\s+)(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)",
 					"captures": {
 						"1": {
 							"name": "keyword.other.Xtend"
@@ -762,6 +776,9 @@
 				},
 				{
 					"include": "#InheritedDecl"
+				},
+				{
+					"include": "#ImplementsDecl"
 				},
 				{
 					"include": "#BracedTypeBody"
