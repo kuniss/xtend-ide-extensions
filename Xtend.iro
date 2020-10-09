@@ -381,7 +381,7 @@ FieldOrVarDecl: context {
       regex       \= (\bval\b|\bvar\b|\bextension\b)(\s+)($${__qualifiedName})(\s+)($${__Id})
       styles []    = .storage_type, .whitespace, .entity_name, .whitespace, .variable; 
    }
-      : pattern {
+   : pattern {
       regex       \= (\bval\b|\bvar\b|\bextension\b)(\s+)($${__Id})
       styles []    = .storage_type, .whitespace, .variable; 
    }
@@ -507,6 +507,10 @@ Parameters: context {
          styles []    = .parenthesis;
       }
       : include "Annotation";
+      : pattern {
+         regex       \= (\s*)($${__predefTypes})(\s+)($${__Id})
+         styles []    = .whitespace, .keyword_other, .whitespace, .variable; 
+      }
       : pattern {
          regex       \= ((?:\bextension\b)?)(\s*)($${__qualifiedName})(\s+)($${__Id})
          styles []    = .keyword_other, .whitespace, .entity_name, .whitespace,  .variable_parameter; 

@@ -506,6 +506,23 @@
 					"include": "#Annotation"
 				},
 				{
+					"match": "(\\s*)(\\bboolean\\b|\\bint\\b|\\bfloat\\b|\\bdouble\\b|\\bchar\\b|\\bvoid\\b)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b)",
+					"captures": {
+						"1": {
+							"name": "whitespace.Xtend"
+						},
+						"2": {
+							"name": "keyword.other.Xtend"
+						},
+						"3": {
+							"name": "whitespace.Xtend"
+						},
+						"4": {
+							"name": "variable.Xtend"
+						}
+					}
+				},
+				{
 					"match": "((?:\\bextension\\b)?)(\\s*)(\\^?\\w+(?:(?:\\.|\\$)\\w+)*)(\\s+)(\\b\\^?(?:[\\w\\d])+\\b)",
 					"captures": {
 						"1": {
