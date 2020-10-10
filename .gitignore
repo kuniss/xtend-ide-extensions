@@ -1,1 +1,5 @@
 xtend-vscode-extension/vsc-extension-quickstart.md
+xtend-vscode-extension/xtend-lang-0.2.0.vsix
+**/.gradle/
+**/build/
+node_modules/**
