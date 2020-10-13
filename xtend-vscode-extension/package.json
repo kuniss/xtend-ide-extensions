@@ -2,7 +2,7 @@
     "name": "xtend-lang",
     "displayName": "Xtend",
     "description": "Xtend Programming Language",
-    "version": "0.2.0",
+    "version": "0.3.1",
     "publisher": "GrammarCraft",
     "license": "SEE LICENSE IN LICENSE.txt",
     "homepage": "https://github.com/kuniss/xtend-ide-extensions/blob/master/xtend-vscode-extension/README.md",
