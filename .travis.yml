@@ -4,4 +4,4 @@ cache:
   - $HOME/.gradle
   - $HOME/build
 install: skip
-script: ./gradlew check && ./.travis/releaseOnTag.sh
+script: ./gradlew build && ./.travis/releaseOnTag.sh
