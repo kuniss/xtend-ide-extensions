@@ -1,7 +1,9 @@
 # Change Log
 
-## 0.3.1
+## 0.2.1
+- optimized extension size by excluding .gradle parts
 
+## 0.2.0
 - improved coloring of predefined types in method parameters
 - corrected highlighting computation for multiple interface implementation (issue #1)
 
