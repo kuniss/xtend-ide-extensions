@@ -16,3 +16,7 @@ task startCode(type:Exec, dependsOn: installExtension) {
     }
     args "examples", '--new-window'
 }
+
+task build {
+    dependsOn vscodeExtension
+}
