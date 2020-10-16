@@ -1,5 +1,7 @@
 # Change Log
 
+## 0.2.2
+
 ## 0.2.1
 - optimized extension size by excluding .gradle parts
 
