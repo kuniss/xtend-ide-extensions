@@ -2,6 +2,5 @@ language: java
 cache:
   directories:
   - $HOME/.gradle
-  - $HOME/build
 install: skip
 script: ./gradlew build && ./.travis/releaseOnTag.sh
