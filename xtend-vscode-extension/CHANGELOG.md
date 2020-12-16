@@ -1,6 +1,7 @@
 # Change Log
 
 ## 0.2.3
+- artifical release just to put Eclipse Foundation Open VSX Publisher Agreement in action
 
 ## 0.2.2
 - improved build logic, for working well on Travis CI
