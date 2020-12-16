@@ -1,5 +1,7 @@
 # Change Log
 
+## 0.2.4
+
 ## 0.2.3
 - artifical release just to put Eclipse Foundation Open VSX Publisher Agreement in action
 
