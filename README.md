@@ -1,6 +1,8 @@
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/kuniss/xtend-ide-extensions) 
-[![Build Status](https://travis-ci.com/kuniss/xtend-ide-extensions.svg?branch=master)](https://travis-ci.com/kuniss/xtend-ide-extensions)
-[![Visual Studio Code extension](https://vsmarketplacebadge.apphb.com/version/Grammarcraft.xtend-lang.svg)](https://marketplace.visualstudio.com/items?itemName=Grammarcraft.xtend-lang)
+
+![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/Grammarcraft.xtend-lang.svg?style=flat-square)
+
+![Open VSX Version](https://img.shields.io/open-vsx/v/grammarcraft/xtend-lang.svg?style=flat-square)
 
 # xtend-ide-extensions
 IDE extensions for the Xtend programming language
