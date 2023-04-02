@@ -72,7 +72,7 @@ configure(subprojects.findAll { it.name.endsWith('vscode-extension') }) {
 	task publishToVSMarketplace(dependsOn: vscodeExtension, type: NodeTask) {
 		group = 'Publish'
 		description = 'Publishs the plugin to the VS Code Marketplace'
-	    script = file("$rootProject.projectDir/node_modules/vsce/out/vsce")
+	    script = file("$npmInstallVsce.destPath/vsce")
 	    args = [ 'publish', "--packagePath", project.tasks.vscodeExtension.destPath, '-p', System.getenv('MSVSX_ACCESS_TOKEN') ] 
 	    execOverrides {
 	        workingDir = projectDir
