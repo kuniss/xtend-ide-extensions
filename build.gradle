@@ -14,8 +14,8 @@ buildscript {
 apply plugin: 'com.github.node-gradle.node'
 apply plugin: 'net.researchgate.release'
 
-def nodeVersion = '10.15.3'
-def npmVersion_ = '6.4.1'
+def nodeVersion = '18.15.0'
+def npmVersion_ = '9.6.3'
 node {
 	version = nodeVersion
 	npmVersion = npmVersion_
@@ -62,7 +62,7 @@ configure(subprojects.findAll { it.name.endsWith('vscode-extension') }) {
 		doFirst {
 			destDir.mkdirs()
 		}
-		script = file("$npmInstallVsce.destPath/out/vsce")
+		script = file("$npmInstallVsce.destPath/vsce")
 		args = [ 'package', '--out', destPath ]
 		execOverrides {
 			workingDir = projectDir
