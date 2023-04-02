@@ -610,7 +610,11 @@
 							"name": "string.quoted.double.Xtend"
 						}
 					},
-					"contentName": "string.quoted.double.Xtend",
+					"patterns": [
+						{
+							"include": "#String__1"
+						}
+					],
 					"end": "(\\\")",
 					"endCaptures": {
 						"1": {
@@ -625,7 +629,11 @@
 							"name": "string.quoted.single.Xtend"
 						}
 					},
-					"contentName": "string.quoted.single.Xtend",
+					"patterns": [
+						{
+							"include": "#String__2"
+						}
+					],
 					"end": "(\\')",
 					"endCaptures": {
 						"1": {
@@ -646,10 +654,28 @@
 			]
 		},
 		"String__1": {
-			"patterns": []
+			"patterns": [
+				{
+					"match": "(\\\\.)",
+					"name": "string.quoted.double.Xtend"
+				},
+				{
+					"match": "([^\\x{0022}\\x{005c}]+)",
+					"name": "string.quoted.double.Xtend"
+				}
+			]
 		},
 		"String__2": {
-			"patterns": []
+			"patterns": [
+				{
+					"match": "(\\\\.)",
+					"name": "string.quoted.single.Xtend"
+				},
+				{
+					"match": "([^\\x{0027}\\x{005c}]+)",
+					"name": "string.quoted.single.Xtend"
+				}
+			]
 		},
 		"TEMPLATE_TEXT": {
 			"patterns": [

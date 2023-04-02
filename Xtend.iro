@@ -618,19 +618,33 @@ String : context {
    : inline_push {
       regex          \= (\")
       styles []       = .string_quoted_double;
-      default_style   = .string_quoted_double
       : pop {
          regex       \= (\")
          styles []    = .string_quoted_double;
+      }
+      : pattern {
+         regex \= (\\.)
+         styles[] = .string_quoted_double;
+      }
+      : pattern {
+         regex      \= ([^"\\]+)
+         styles [] = .string_quoted_double;
       }
    }
    : inline_push {
       regex          \= (\')
       styles []       = .string_quoted_single;
-      default_style   = .string_quoted_single
       : pop {
          regex       \= (\')
          styles []    = .string_quoted_single;
+      }
+      : pattern {
+         regex \= (\\.)
+         styles[] = .string_quoted_single;
+      }
+      : pattern {
+         regex      \= ([^'\\]+)
+         styles [] = .string_quoted_single;
       }
    }
 }
@@ -698,4 +712,3 @@ TemplateComment: context {
 
 
 }
-

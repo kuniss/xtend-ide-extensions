@@ -1,6 +1,7 @@
 # Change Log
 
-## 0.2.4
+## 0.3.0
+- corrected escape character highlighting issue in strings detected by Andreas Krall (andi@complang.tuwien.ac.at)
 
 ## 0.2.3
 - artifical release just to put Eclipse Foundation Open VSX Publisher Agreement in action
