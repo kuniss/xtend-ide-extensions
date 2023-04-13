@@ -42,7 +42,10 @@ configure(subprojects.findAll { it.name.endsWith('vscode-extension') }) {
 
 	def inputFiles = fileTree(
 		dir: projectDir, 
-		excludes: [ 'out/**', '.gitignore', '.gradle/**', 'build/**', '*.gradle' ]
+		excludes: [ 
+			'out/**', '.gitignore', 
+			'.gradle/**', 'build/**', '*.gradle',
+			'.settings/**', '.project' ]
 	)
 
 	npmInstall {
